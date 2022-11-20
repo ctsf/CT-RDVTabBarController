@@ -116,7 +116,6 @@
     if (_titleLabel == nil) {
         _titleLabel = [UILabel new];
         _titleLabel.numberOfLines = 0;
-        _titleLabel.textAlignment = NSTextAlignmentLeft;
         _titleLabel.lineBreakMode = NSLineBreakByTruncatingTail;
         _titleLabel.userInteractionEnabled = NO;
     }
@@ -125,10 +124,12 @@
 }
 
 - (void)setupContentView {
-    UIView *contentView = [UIView new];
+    UIStackView *contentView = [[UIStackView alloc] initWithArrangedSubviews:@[self.imageView, self.titleLabel]];
+    contentView.axis = UILayoutConstraintAxisHorizontal;
+    contentView.spacing = self.imageTitleOffset;
+    contentView.alignment = UIStackViewAlignmentCenter;
+    contentView.distribution = UIStackViewDistributionEqualSpacing;
     contentView.userInteractionEnabled = NO;
-    [contentView addSubview:self.imageView];
-    [contentView addSubview:self.titleLabel];
     [self addSubview:contentView];
     
     // setup Content View constraints
@@ -136,7 +137,7 @@
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:contentView
                                                      attribute:NSLayoutAttributeTop
-                                                     relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                     relatedBy:NSLayoutRelationEqual
                                                         toItem:self
                                                      attribute:NSLayoutAttributeTop
                                                     multiplier:1
@@ -144,7 +145,7 @@
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:self
                                                      attribute:NSLayoutAttributeBottom
-                                                     relatedBy:NSLayoutRelationGreaterThanOrEqual
+                                                     relatedBy:NSLayoutRelationEqual
                                                         toItem:contentView
                                                      attribute:NSLayoutAttributeBottom
                                                     multiplier:1
@@ -167,14 +168,6 @@
                                                       constant:self.contentOffset.right]];
     
     [self addConstraint:[NSLayoutConstraint constraintWithItem:contentView
-                                                     attribute:NSLayoutAttributeCenterY
-                                                     relatedBy:NSLayoutRelationEqual
-                                                        toItem:self
-                                                     attribute:NSLayoutAttributeCenterY
-                                                    multiplier:1
-                                                      constant:0]];
-    
-    [self addConstraint:[NSLayoutConstraint constraintWithItem:contentView
                                                      attribute:NSLayoutAttributeCenterX
                                                      relatedBy:NSLayoutRelationEqual
                                                         toItem:self
@@ -183,16 +176,6 @@
                                                       constant:0]];
     
     // setup Image View constraints
-    self.imageView.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView
-                                                            attribute:NSLayoutAttributeCenterY
-                                                            relatedBy:NSLayoutRelationEqual
-                                                               toItem:contentView
-                                                            attribute:NSLayoutAttributeCenterY
-                                                           multiplier:1
-                                                             constant:0]];
-    
     [self.imageView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView
                                                                attribute:NSLayoutAttributeHeight
                                                                relatedBy:NSLayoutRelationEqual
@@ -208,72 +191,6 @@
                                                                attribute:nil
                                                               multiplier:1
                                                                 constant:24]];
-    
-    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView
-                                                            attribute:NSLayoutAttributeTop
-                                                            relatedBy:NSLayoutRelationGreaterThanOrEqual
-                                                               toItem:contentView
-                                                            attribute:NSLayoutAttributeTop
-                                                           multiplier:1
-                                                             constant:0]];
-    
-    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:contentView
-                                                            attribute:NSLayoutAttributeBottom
-                                                            relatedBy:NSLayoutRelationGreaterThanOrEqual
-                                                               toItem:self.imageView
-                                                            attribute:NSLayoutAttributeBottom
-                                                           multiplier:1
-                                                             constant:0]];
-    
-    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.imageView
-                                                            attribute:NSLayoutAttributeLeading
-                                                            relatedBy:NSLayoutRelationEqual
-                                                               toItem:contentView
-                                                            attribute:NSLayoutAttributeLeading
-                                                           multiplier:1
-                                                             constant:0]];
-    // setup Title Label constraints
-    self.titleLabel.translatesAutoresizingMaskIntoConstraints = NO;
-    
-    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.titleLabel
-                                                            attribute:NSLayoutAttributeCenterY
-                                                            relatedBy:NSLayoutRelationEqual
-                                                               toItem:contentView
-                                                            attribute:NSLayoutAttributeCenterY
-                                                           multiplier:1
-                                                             constant:0]];
-    
-    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.titleLabel
-                                                            attribute:NSLayoutAttributeTop
-                                                            relatedBy:NSLayoutRelationEqual
-                                                               toItem:contentView
-                                                            attribute:NSLayoutAttributeTop
-                                                           multiplier:1
-                                                             constant:0]];
-    
-    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.titleLabel
-                                                            attribute:NSLayoutAttributeBottom
-                                                            relatedBy:NSLayoutRelationEqual
-                                                               toItem:contentView
-                                                            attribute:NSLayoutAttributeBottom
-                                                           multiplier:1
-                                                             constant:0]];
-    
-    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.titleLabel
-                                                            attribute:NSLayoutAttributeTrailing
-                                                            relatedBy:NSLayoutRelationEqual
-                                                               toItem:contentView
-                                                            attribute:NSLayoutAttributeTrailing
-                                                           multiplier:1
-                                                             constant:0]];
-    
-    [contentView addConstraint:[NSLayoutConstraint constraintWithItem:self.titleLabel
-                                                            attribute:NSLayoutAttributeLeading
-                                                            relatedBy:NSLayoutRelationEqual
-                                                               toItem:self.imageView
-                                                            attribute:NSLayoutAttributeTrailing
-                                                           multiplier:1
-                                                             constant:self.imageTitleOffset]];
 }
 
 #pragma mark - UIViewRendering
