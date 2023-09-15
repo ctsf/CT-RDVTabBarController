@@ -193,6 +193,11 @@
                                                                 constant:24]];
 }
 
+- (void)layoutSubviews {
+     [self.titleLabel setNeedsUpdateConstraints];
+     [super layoutSubviews];
+ }
+
 #pragma mark - UIViewRendering
 
 - (void)drawRect:(CGRect)rect {
