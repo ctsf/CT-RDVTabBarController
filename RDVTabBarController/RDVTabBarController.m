@@ -282,7 +282,11 @@
 @implementation UIViewController (RDVTabBarControllerItemInternal)
 
 - (void)rdv_setTabBarController:(RDVTabBarController *)tabBarController {
-    objc_setAssociatedObject(self, @selector(rdv_tabBarController), tabBarController, OBJC_ASSOCIATION_ASSIGN);
+    __strong typeof(self) strongSelf = self;
+    if (!strongSelf) {
+        return;
+    }
+    objc_setAssociatedObject(strongSelf, @selector(rdv_tabBarController), tabBarController, OBJC_ASSOCIATION_ASSIGN);
 }
 
 @end
@@ -290,12 +294,17 @@
 @implementation UIViewController (RDVTabBarControllerItem)
 
 - (nullable RDVTabBarController *)rdv_tabBarController {
-    RDVTabBarController *tabBarController = objc_getAssociatedObject(self, @selector(rdv_tabBarController));
-    
-    if (!tabBarController && self.parentViewController) {
-        tabBarController = [self.parentViewController rdv_tabBarController];
+    __strong typeof(self) strongSelf = self;
+    if (!strongSelf) {
+        return nil;
     }
-    
+
+    RDVTabBarController *tabBarController = objc_getAssociatedObject(strongSelf, @selector(rdv_tabBarController));
+
+    if (!tabBarController && strongSelf.parentViewController) {
+        tabBarController = [strongSelf.parentViewController rdv_tabBarController];
+    }
+
     return tabBarController;
 }
 
